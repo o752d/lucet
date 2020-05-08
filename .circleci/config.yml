@@ -24,7 +24,8 @@ jobs:
           sudo dpkg -i wasi-sdk_10.0_amd64.deb
           rm -f wasi-sdk_10.0_amd64.deb
           export WASI_SDK=/opt/wasi-sdk
-          ls /opt/wasi-sdk/bin
+          pwd
+          ls
           make install
 
 

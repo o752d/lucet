@@ -10,8 +10,6 @@ jobs:
           git submodule update --init
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
           source $HOME/.cargo/env
-          rustup run stable rustc --version --verbose
-          rustup run stable cargo --version --verbose
           export DEBIAN_FRONTEND=noninteractive
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends build-essential curl git libbsd-dev doxygen python-sphinx cmake ninja-build ca-certificates software-properties-common libssl-dev pkg-config csmith libcsmith-dev creduce gcc-multilib clang-6.0
@@ -26,6 +24,9 @@ jobs:
           export WASI_SDK=/opt/wasi-sdk
           pwd
           ls
+          rustup target add wasm32-wasi
+          rustup run stable rustc --version --verbose
+          rustup run stable cargo --version --verbose
           make install
 
 

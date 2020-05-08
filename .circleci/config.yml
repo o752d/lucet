@@ -24,9 +24,9 @@ jobs:
           sudo dpkg -i wasi-sdk_10.0_amd64.deb
           rm -f wasi-sdk_10.0_amd64.deb
           export WASI_SDK=/opt/wasi-sdk
-          echo "do we manage to get here?"
+          ls /opt/wasi-sdk/bin
           make install
-          rustup run stable cargo build
+
 
 workflows:
   version: 2.1

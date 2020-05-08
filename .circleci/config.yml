@@ -20,9 +20,11 @@ jobs:
           export LD_LIBRARY_PATH=/usr/local/lib
           rustup component add rustfmt
           curl -sSLO https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-10/wasi-sdk_10.0_amd64.deb
+          echo "before wasi-sdk"
           sudo dpkg -i wasi-sdk_10.0_amd64.deb
           rm -f wasi-sdk_10.0_amd64.deb
           export WASI_SDK=/opt/wasi-sdk
+          echo "do we manage to get here?"
           make install
           rustup run stable cargo build
 

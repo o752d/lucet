@@ -9,6 +9,7 @@ jobs:
       - run: git submodule update --init
       - run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          source $HOME/.cargo/env
           rustup run stable rustc --version --verbose
           rustup run stable cargo --version --verbose
           rustup run stable cargo build

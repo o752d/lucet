@@ -14,9 +14,9 @@ jobs:
           rustup run stable cargo --version --verbose
       - run: |
           export DEBIAN_FRONTEND=noninteractive
-          sudo apt update
-          sudo apt install -y --no-install-recommends build-essential curl git libbsd-dev doxygen python-sphinx cmake ninja-build ca-certificates software-properties-common libssl-dev pkg-config csmith libcsmith-dev creduce gcc-multilib clang-6.0
-          rm -rf /var/lib/apt/lists/*
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential curl git libbsd-dev doxygen python-sphinx cmake ninja-build ca-certificates software-properties-common libssl-dev pkg-config csmith libcsmith-dev creduce gcc-multilib clang-6.0
+          sudo rm -rf /var/lib/apt/lists/*
           sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-6.0 100
           export LD_LIBRARY_PATH=/usr/local/lib
       - run: |

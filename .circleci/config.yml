@@ -14,17 +14,17 @@ jobs:
           rustup run stable cargo --version --verbose
       - run: |
           export DEBIAN_FRONTEND=noninteractive
-          apt-get update
-          apt-get install -y --no-install-recommends build-essential curl git libbsd-dev doxygen python-sphinx cmake ninja-build ca-certificates software-properties-common libssl-dev pkg-config csmith libcsmith-dev creduce gcc-multilib clang-6.0
+          sudo apt update
+          sudo apt install -y --no-install-recommends build-essential curl git libbsd-dev doxygen python-sphinx cmake ninja-build ca-certificates software-properties-common libssl-dev pkg-config csmith libcsmith-dev creduce gcc-multilib clang-6.0
           rm -rf /var/lib/apt/lists/*
-          update-alternatives --install /usr/bin/clang clang /usr/bin/clang-6.0 100
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-6.0 100
           export LD_LIBRARY_PATH=/usr/local/lib
       - run: |
           rustup component add rustfmt
           rustup target add wasm32-wasi
       - run: |
           curl -sSLO https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-10/wasi-sdk_10.0_amd64.deb
-          dpkg -i wasi-sdk_10.0_amd64.deb
+          sudo dpkg -i wasi-sdk_10.0_amd64.deb
           rm -f wasi-sdk_10.0_amd64.deb
           export WASI_SDK=/opt/wasi-sdk
       - run: |

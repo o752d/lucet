@@ -24,6 +24,7 @@ jobs:
           export WASI_SDK=/opt/wasi-sdk
           pwd
           ls
+          ls wasmtime/crates/wasi-common/WASI/tools/witx
           rustup target add wasm32-wasi
           rustup run stable rustc --version --verbose
           rustup run stable cargo --version --verbose

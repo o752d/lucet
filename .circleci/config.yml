@@ -8,13 +8,13 @@ jobs:
       - run: git submodule sync
       - run: git submodule update --init
       - run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
           rustup run stable rustc --version --verbose
           rustup run stable cargo --version --verbose
           rustup run stable cargo build
 
 workflows:
   version: 2.1
-  build_and_test:
+  build:
     jobs:
       - build

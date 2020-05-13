@@ -1,38 +1,19 @@
 version: 2.1
 jobs:
-  build:
+  test:
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-1604:202004-01
     steps:
       - checkout
       - run: |
           git submodule sync
           git submodule update --init --recursive
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          source $HOME/.cargo/env
-          export DEBIAN_FRONTEND=noninteractive
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends build-essential curl git libbsd-dev doxygen python-sphinx cmake ninja-build ca-certificates software-properties-common libssl-dev pkg-config csmith libcsmith-dev creduce gcc-multilib clang-6.0
-          sudo rm -rf /var/lib/apt/lists/*
-          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-6.0 100
-          export LD_LIBRARY_PATH=/usr/local/lib
-          rustup component add rustfmt
-          curl -sSLO https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-10/wasi-sdk_10.0_amd64.deb
-          echo "before wasi-sdk"
-          sudo dpkg -i wasi-sdk_10.0_amd64.deb
-          rm -f wasi-sdk_10.0_amd64.deb
-          export WASI_SDK=/opt/wasi-sdk
-          pwd
-          ls
-          ls wasmtime/crates/wasi-common/WASI/tools/witx
-          rustup target add wasm32-wasi
-          rustup run stable rustc --version --verbose
-          rustup run stable cargo --version --verbose
-          make install
-
+          docker build -t lucet .
+          docker run -v $CIRCLE_WORKING_DIRECTORY:/lucet -it lucet /bin/bash -c "make -C /lucet test-ci"
+          git diff --exit-code
 
 workflows:
   version: 2.1
-  build:
+  build_and_test:
     jobs:
-      - build
+      - test

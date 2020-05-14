@@ -4,15 +4,10 @@ jobs:
     machine:
       image: ubuntu-1604:202004-01
     steps:
-      - checkout
-      - run:
-          name: sync and recursively update submodules
-          command: |
-            set -x
-            git submodule sync
-            git submodule update --init --recursive
+      - checkout_recursively
       - run_in_container:
           command: "make -C /lucet test-ci"
+      - ensure_sources_unchanged
 
 workflows:
   version: 2.1
@@ -21,16 +16,35 @@ workflows:
       - test
 
 commands:
+  checkout_recursively:
+    description: "Check out the git repository, and recursively initialize its submodules"
+    steps:
+      - checkout
+      - run:
+          name: "Sync and Recursively Update Submodules"
+          command: |
+            set -x
+            git submodule sync
+            git submodule update --init --recursive
+
   run_in_container:
     description: "Build the Lucet development/CI Docker image, and then run a command in it"
     parameters:
       command:
         type: string
     steps:
-      - run: |
-          set -x
-          docker build -t lucet .
-          docker run --privileged -v `pwd`:/lucet -it lucet /bin/bash -c "<< parameters.command >>"
-          git diff --exit-code
+      - run:
+          name: "Build and Run Command in Docker: << parameters.command >>"
+          command: |
+            set -x
+            docker build -t lucet .
+            docker run --privileged -v `pwd`:/lucet -it lucet /bin/bash -c "<< parameters.command >>"
 
-          echo
+  ensure_sources_unchanged:
+    description: "Make sure that previous steps did not change the source files from git"
+    steps:
+      - run:
+          name: "Ensure Sources Are Unchanged"
+          command: |
+            set -x
+            git diff --exit-code

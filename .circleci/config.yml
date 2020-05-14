@@ -6,10 +6,11 @@ jobs:
     steps:
       - checkout
       - run: |
+          set -x
           git submodule sync
           git submodule update --init --recursive
           docker build -t lucet .
-          docker run -v $(readlink -f $CIRCLE_WORKING_DIRECTORY):/lucet -it lucet /bin/bash -c "make -C /lucet test-ci"
+          docker run -v `pwd`:/lucet -it lucet /bin/bash -c "make -C /lucet test-ci"
           git diff --exit-code
 
 workflows:

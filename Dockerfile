@@ -50,4 +50,4 @@ RUN curl -sS -L "https://github.com/WebAssembly/binaryen/releases/download/versi
     install -d -v "${BINARYEN_DIR}/bin" && \
     for tool in wasm-opt wasm-reduce; do install -v "binaryen-version_${BINARYEN_VERSION}/${tool}" "${BINARYEN_DIR}/bin/"; done && \
     rm -fr binaryen-version_${BINARYEN_VERSION}
-ENV PATH=$BINARYEN_DIR:$PATH
+ENV PATH=$BINARYEN_DIR/bin:$PATH

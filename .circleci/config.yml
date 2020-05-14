@@ -5,16 +5,32 @@ jobs:
       image: ubuntu-1604:202004-01
     steps:
       - checkout
-      - run: |
-          set -x
-          git submodule sync
-          git submodule update --init --recursive
-          docker build -t lucet .
-          docker run --privileged -v `pwd`:/lucet -it lucet /bin/bash -c "make -C /lucet test-ci"
-          git diff --exit-code
+      - run:
+          name: sync and recursively update submodules
+          command: |
+            set -x
+            git submodule sync
+            git submodule update --init --recursive
+      - run_in_container:
+          command: "make -C /lucet test-ci"
 
 workflows:
   version: 2.1
   build_and_test:
     jobs:
       - test
+
+commands:
+  run_in_container:
+    description: "Build the Lucet development/CI Docker image, and then run a command in it"
+    parameters:
+      command:
+        type: string
+    steps:
+      - run: |
+          set -x
+          docker build -t lucet .
+          docker run --privileged -v `pwd`:/lucet -it lucet /bin/bash -c "<< parameters.command >>"
+          git diff --exit-code
+
+          echo
